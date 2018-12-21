@@ -1,0 +1,274 @@
+FormTablesList<-ODBC::read_sql("SOMEDATABASE","select distinct FormType from FORMSSTORAGE.dbo.Data")
+
+#Tests for 'missing' apply to all forms Ignores cases, returns how many times it occurs
+
+Utest<-function(x){length(grep('^U$',x,value=TRUE))}
+UnknownTest<-function(x){length(grep('unknown',x,ignore.case=TRUE,value=TRUE))}
+NotDoneTest<-function(x){length(grep('not done',x,ignore.case=TRUE,value=TRUE))}
+NDTest<-function(x){length(grep('^ND$',x,ignore.case=FALSE,value=TRUE))}
+IncompleteTest<-function(x){length(grep('incomplete',x,ignore.case=TRUE,value=TRUE))}
+
+
+
+#Deceased Donor Reg reads in forms
+DeceasedDonorRegistration<-read.csv('/fullpath/file.csv')
+DDR$X<-NULL #removes first index column 
+
+
+# Apply tests per form to check for three defined concepts of missingness 'Unknown' 'Incomplete' or 'Not Done'
+DDR_U<-sapply(DDR,Utest)
+DDR_Unk<-sapply(DDR,UnknownTest)
+DDR_NotD<-sapply(DDR,NotDoneTest)
+DDR_ND<-sapply(DDR,NDTest)
+DDR_Inc<-sapply(DDR,IncompleteTest)
+
+DDR_NotDone<-DDR_ND+DDR_NotD
+DDR_Unknown<-DDR_U+DDR_Unk
+
+DDRfieldcounts<-rbind(DDR_Inc,DDR_NotDone,DDR_Unknown)
+
+#TX Rec Reg
+
+TRR<-read.csv('fullpath/file/file2.csv')
+TRR$X<-NULL #removes first index column
+
+TRR_U<-sapply(TRR,Utest)
+TRR_Unk<-sapply(TRR,UnknownTest)
+TRR_NotD<-sapply(TRR,NotDoneTest)
+TRR_ND<-sapply(TRR,NDTest)
+TRR_Inc<-sapply(TRR,IncompleteTest)
+
+TRR_NotDone<-TRR_ND+TRR_NotD
+TRR_Unknown<-TRR_U+TRR_Unk
+
+TRRfieldcounts<-rbind(TRR_Inc,TRR_NotDone,TRR_Unknown)
+
+#Living Donor Followup
+LDF<-read.csv('fullpath/file/file3.csv')
+LDF$X<-NULL #removes first index column 
+
+LDF_U<-sapply(LDF,Utest)
+LDF_Unk<-sapply(LDF,UnknownTest)
+LDF_NotD<-sapply(LDF,NotDoneTest)
+LDF_ND<-sapply(LDF,NDTest)
+LDF_Inc<-sapply(LDF,IncompleteTest)
+
+LDF_NotDone<-LDF_ND+LDF_NotD
+LDF_Unknown<-LDF_U+LDF_Unk
+
+LDFfieldcounts<-rbind(LDF_Inc,LDF_NotDone,LDF_Unknown)
+
+#Living Donor Reg
+LDR<-read.csv('fullpath/file/file4.csv')
+LDR$X<-NULL #removes first index column 
+
+LDR_U<-sapply(LDR,Utest)
+LDR_Unk<-sapply(LDR,UnknownTest)
+LDR_NotD<-sapply(LDR,NotDoneTest)
+LDR_ND<-sapply(LDR,NDTest)
+LDR_Inc<-sapply(LDR,IncompleteTest)
+
+LDR_NotDone<-LDR_ND+LDR_NotD
+LDR_Unknown<-LDR_U+LDR_Unk
+
+LDRfieldcounts<-rbind(LDR_Inc,LDR_NotDone,LDR_Unknown)
+
+#TX Candidate Registration
+TCR<-read.csv('fullpath/file/file5.csv')
+TCR$X<-NULL #removes first index column 
+
+TCR_U<-sapply(TCR,Utest)
+TCR_Unk<-sapply(TCR,UnknownTest)
+TCR_NotD<-sapply(TCR,NotDoneTest)
+TCR_ND<-sapply(TCR,NDTest)
+TCR_Inc<-sapply(TCR,IncompleteTest)
+
+TCR_NotDone<-TCR_ND+TCR_NotD
+TCR_Unknown<-TCR_U+TCR_Unk
+
+TCRfieldcounts<-rbind(TCR_Inc,TCR_NotDone,TCR_Unknown)
+
+#TX Follow Up 1 year
+TRF1<-read.csv('fullpath/file/file6.csv')
+TRF1$X<-NULL #removes first index column 
+
+
+TRF1_U<-sapply(TRF1,Utest)
+TRF1_Unk<-sapply(TRF1,UnknownTest)
+TRF1_NotD<-sapply(TRF1,NotDoneTest)
+TRF1_ND<-sapply(TRF1,NDTest)
+TRF1_Inc<-sapply(TRF1,IncompleteTest)
+
+TRF1_NotDone<-TRF1_ND+TRF1_NotD
+TRF1_Unknown<-TRF1_U+TRF1_Unk
+
+TRF1fieldcounts<-rbind(TRF1_Inc,TRF1_NotDone,TRF1_Unknown)
+
+#TX Follow up 5 year
+TRF5<-read.csv('fullpath/file/file7.csv')
+TRF5$X<-NULL #removes first index column
+
+TRF5_U<-sapply(TRF5,Utest)
+TRF5_Unk<-sapply(TRF5,UnknownTest)
+TRF5_NotD<-sapply(TRF5,NotDoneTest)
+TRF5_ND<-sapply(TRF5,NDTest)
+TRF5_Inc<-sapply(TRF5,IncompleteTest)
+
+TRF5_NotDone<-TRF5_ND+TRF5_NotD
+TRF5_Unknown<-TRF5_U+TRF5_Unk
+
+
+
+TRF5fieldcounts<-rbind(TRF5_Inc,TRF5_NotDone,TRF5_Unknown)
+
+
+#Number and % of fields that have incomplete data per submitted forms 
+
+Numberoffields<-c(length(DDR),length(TRR),length(LDF),length(LDR),length(TCR),length(TRF1),length(TRF5))
+x<-c('DDR','TRR','LDF','LDR','TCR','TRF1','TRF5')
+Df<-as.data.frame(Numberoffields,x)
+
+#Only looking at fields with incomplete data
+for(i in length(DDRfieldcounts)){DDRIncFields<-DDRfieldcounts[,colSums(DDRfieldcounts)>0]}
+for(i in length(TRRfieldcounts)){TRRIncFields<-TRRfieldcounts[,colSums(TRRfieldcounts)>0]}
+for(i in length(LDFfieldcounts)){LDFIncFields<-LDFfieldcounts[,colSums(LDFfieldcounts)>0]}
+for(i in length(LDRfieldcounts)){LDRIncFields<-LDRfieldcounts[,colSums(LDRfieldcounts)>0]}
+for(i in length(TCRfieldcounts)){TCRIncFields<-TCRfieldcounts[,colSums(TCRfieldcounts)>0]}
+for(i in length(TRF1fieldcounts)){TRF1IncFields<-TRF1fieldcounts[,colSums(TRF1fieldcounts)>0]}
+for(i in length(TRF5fieldcounts)){TRF5IncFields<-TRF5fieldcounts[,colSums(TRF5fieldcounts)>0]}
+
+#N of Incomplete Fields per form 
+NumberIncFields<-c(ncol(DDRIncFields),ncol(TRRIncFields),ncol(LDFIncFields),ncol(LDRIncFields),ncol(TCRIncFields),ncol(TRF1IncFields),ncol(TRF5IncFields))
+Df<-cbind(Df,NumberIncFields)
+# % of Incomplete Fields per form
+PercIncFields<-(NumberIncFields/Numberoffields)*100
+Df<-cbind(Df,PercIncFields)
+
+
+
+#Number and % of fields that have incomplete data by field 
+
+#Fieldcounts chart provides N for #5 (by field), % below
+DDRPercFields<-(DDRfieldcounts/nrow(DDR))*100
+LDFPercFields<-(LDFfieldcounts/nrow(LDF))*100
+LDRPercFields<-(LDRfieldcounts/nrow(LDR))*100
+TRF1PercFields<-(TRF1fieldcounts/nrow(TRF1))*100
+TRF5PercFields<-(TRF5fieldcounts/nrow(TRF5))*100
+TRRPercFields<-(TRRfieldcounts/nrow(TRR))*100
+TCRPercFields<-(TCRfieldcounts/nrow(TCR))*100
+
+DDRPercFields<-colSums(DDRPercFields)
+LDFPercFields<-colSums(LDFPercFields)
+LDRPercFields<-colSums(LDRPercFields)
+TRF1PercFields<-colSums(TRF1PercFields)
+TRF5PercFields<-colSums(TRF5PercFields)
+TRRPercFields<-colSums(TRRPercFields)
+TCRPercFields<-colSums(TCRPercFields)
+
+DDRPercFields<-as.data.frame(DDRPercFields)
+LDFPercFields<-as.data.frame(LDFPercFields)
+LDRPercFields<-as.data.frame(LDRPercFields)
+TRF1PercFields<-as.data.frame(TRF1PercFields)
+TRF5PercFields<-as.data.frame(TRF5PercFields)
+TRRPercFields<-as.data.frame(TRRPercFields)
+TCRPercFields<-as.data.frame(TCRPercFields)
+
+
+
+#DDRPercInc<-DDRPercFields[,colSums(DDRPercFields)>0] Consider dropping all non zeros?
+
+
+#Top 10 missing fields per form
+#colSums combines Not Done, Unknown and Incomplete, order puts decreasing highest 1-10
+
+colcountD=colSums(DDRfieldcounts)
+top10D=order(colcountD,decreasing = TRUE)[1:10]
+top10colD=as.data.frame(colcountD[top10D])
+top10infoDDR=cbind(top10colD,DDRPercFields[top10D,])
+
+
+colcountLDF=colSums(LDFfieldcounts)
+top10LDF=order(colcountLDF,decreasing = TRUE)[1:10]
+top10colLDF=as.data.frame(colcountLDF[top10LDF])
+top10infoLDF=cbind(top10colLDF,LDFPercFields[top10LDF,])
+
+colcountLDR=colSums(LDRfieldcounts)
+top10LDR=order(colcountLDR,decreasing = TRUE)[1:10]
+top10colLDR=as.data.frame(colcountLDR[top10LDR])
+top10infoLDR=cbind(top10colLDR,LDRPercFields[top10LDR,])
+
+
+colcountTCR=colSums(TCRfieldcounts)
+top10TCR=order(colcountTCR,decreasing = TRUE)[1:10]
+top10colTCR=as.data.frame(colcountTCR[top10TCR])
+top10infoTCR=cbind(top10colTCR,TCRPercFields[top10TCR,])
+
+colcountT1=colSums(TRF1fieldcounts)
+top10T1=order(colcountT1,decreasing = TRUE)[1:10]
+top10colT1=as.data.frame(colcountT1[top10T1])
+top10infoT1=cbind(top10colT1,TRF1PercFields[top10T1,])
+
+colcountT5=colSums(TRF5fieldcounts)
+top10T5=order(colcountT5,decreasing = TRUE)[1:10]
+top10colT5=as.data.frame(colcountT5[top10T5])
+top10infoT5=cbind(top10colT5,TRF5PercFields[top10T5,])
+
+colcountTRR=colSums(TRRfieldcounts)
+top10TRR=order(colcountTRR,decreasing = TRUE)[1:10]
+top10colTRR=as.data.frame(colcountTRR[top10TRR])
+top10infoTRR=cbind(top10colTRR,TRRPercFields[top10TRR,])
+
+#shows the number of fields with actual missing observations
+
+DDRnum<-sum(DDRfieldcounts)
+LDFnum<-sum(LDFfieldcounts)
+LDRnum<-sum(LDRfieldcounts)
+TCRnum<-sum(TCRfieldcounts)
+TRF1num<-sum(TRF1fieldcounts)
+TRF5num<-sum(TRF5fieldcounts)
+TRRnum<-sum(TRRfieldcounts)
+
+Number<-c(DDRnum,TRRnum,LDFnum,LDRnum,TCRnum,TRF1num,TRF5num)
+#calculates the percent of total missingness per form
+
+DDRperc<-(DDRnum/(nrow(DDR)*length(DDR)))*100
+LDFperc<-(LDFnum/(nrow(LDF)*length(LDF)))*100
+LDRperc<-(LDRnum/(nrow(LDR)*length(LDR)))*100
+TCRperc<-(TCRnum/(nrow(TCR)*length(TCR)))*100
+TRF1perc<-(TRF1num/(nrow(TRF1)*length(TRF1)))*100
+TRF5perc<-(TRF5num/(nrow(TRF5)*length(TRF5)))*100
+TRRperc<-(TRRnum/(nrow(TRR)*length(TRR)))*100
+
+#Simple barchart to show the fields that have high missingness. Creates horizontal bars.
+
+barchart(colcountD,ylab='Fields',xlab='Number of Missing Records',main='DDR Forms validated During 2017')
+barchart(colcountLDF,ylab='Fields',xlab='Number of Missing Records',main='LDF Forms validated During 2017')
+barchart(colcountLDR,ylab='Fields',xlab='Number of Missing Records',main='LDR Forms validated During 2017')
+barchart(colcountT1,ylab='Fields',xlab='Number of Missing Records',main='T1 Forms validated During 2017')
+barchart(colcountT5,ylab='Fields',xlab='Number of Missing Records',main='T5 Forms validated During 2017')
+barchart(colcountTRR,ylab='Fields',xlab='Number of Missing Records',main='TRR Forms validated During 2017')
+barchart(colcountTCR,ylab='Fields',xlab='Number of Missing Records',main='TCR Forms validated During 2017')
+
+#Complete Info Chart
+#binds columns 1)total of Incomplete, Unkown and Not Done, then the percent of such, then total number of entries-missing to get completed entries, then percent of such
+
+DDRinfo<-cbind(colSums(DDRfieldcounts),DDRPercFields,nrow(DDR)-colSums(DDRfieldcounts),100-DDRPercFields)
+colnames(DDRinfo)<-c('N Incomplete','Incomplete %','N Complete','Complete %')
+
+TCRinfo<-cbind(colSums(TCRfieldcounts),TCRPercFields,nrow(TCR)-colSums(TCRfieldcounts),100-TCRPercFields)
+colnames(TCRinfo)<-c('N Incomplete','Incomplete %','N Complete','Complete %')
+
+LDFinfo<-cbind(colSums(LDFfieldcounts),LDFPercFields,nrow(LDF)-colSums(LDFfieldcounts),100-LDFPercFields)
+colnames(LDFinfo)<-c('N Incomplete','Incomplete %','N Complete','Complete %')
+
+LDRinfo<-cbind(colSums(LDRfieldcounts),LDRPercFields,nrow(LDR)-colSums(LDRfieldcounts),100-LDRPercFields)
+colnames(LDRinfo)<-c('N Incomplete','Incomplete %','N Complete','Complete %')
+
+TRRinfo<-cbind(colSums(TRRfieldcounts),TRRPercFields,nrow(TRR)-colSums(TRRfieldcounts),100-TRRPercFields)
+colnames(TRRinfo)<-c('N Incomplete','Incomplete %','N Complete','Complete %')
+
+TRF1info<-cbind(colSums(TRF1fieldcounts),TRF1PercFields,nrow(TRF1)-colSums(TRF1fieldcounts),100-TRF1PercFields)
+colnames(TRF1info)<-c('N Incomplete','Incomplete %','N Complete','Complete %')
+
+TRF5info<-cbind(colSums(TRF5fieldcounts),TRF5PercFields,nrow(TRF5)-colSums(TRF5fieldcounts),100-TRF5PercFields)
+colnames(TRF5info)<-c('N Incomplete','Incomplete %','N Complete','Complete %')
